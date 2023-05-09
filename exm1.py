@@ -1,4 +1,14 @@
-""" You'll need your sheetcloud username and password to get started. If you don't how, here are the steps:
+""" 
+   EXAMPLE 1: BASIC READING AND WRITING
+   ====================================
+
+   Here you'll find examples of the most common use cases. 
+
+
+   NO ACCOUNT? START HERE...
+   =========================
+
+   You'll need your sheetcloud username and password to get started. If you don't how, here are the steps:
 
     1. Head over to `https://sheetcloud.org` and connect your account with Sheetcloud. 
        Sheetcloud offers a free trial and no credit card is required to connect your account.
@@ -19,38 +29,39 @@
 import pandas as pd
 import sheetcloud as sc
 
+from datetime import datetime
+
 
 
 if __name__ == "__main__":
 
-    # Load some data
-    df = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv')
-    
-    print(df)
-    print(df.info())
+   # Load some data
+   df = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv')
 
-    # Alright! So, this is the classic 150x5 iris data set.
+   print(df)
+   print(df.info())
 
-    # Lets store it as a new spreadsheet in our account. Shall we?
-    
-    spreadsheet_name = 'Sheetcloud-Examples'  # This is the name of the target spreadsheet. If it does not exist, `write` will
-                                              # create a new one, no further action required. 
-    worksheet_name = 'Exm1'  # Each spreadsheet contains a number of worksheets (well, you probably used spreadsheet before).
-                             # If this worksheet already exists, the default behavior of `write` will overwrite any existing data.
-    sc.sheets.write(spreadsheet_name, worksheet_name, df, cache=False)  # Don't worry about the last parameter. We will get
-                                                                        # to this later.
+   # Alright! So, this is the classic 150x5 iris data set. Lets add another datetime column and an integer to it.
+   df['a_datetime_column'] = datetime.now()
+   df['an_int_column'] = 42
 
-    # Perfect! Lets read it.
-    df2 = sc.sheets.read(spreadsheet_name, worksheet_name, cache=False) # Straightforward :)
-    
-    print(df2)
-    print(df2.info())
-    # Same format, same data. Yay.
-    
-    # If we want to compare our data to the original, we also have to set the types accordingly:
-    float_columns = df2.columns.tolist()
-    float_columns.remove('species')
-    df2[float_columns] = df2[float_columns].astype('float', errors='ignore')
 
-    # Now, show the differences 
-    print('List the differences of the original dataframe with our copy: \n', df.compare(df2))
+   # Lets store it as a new spreadsheet in our account. Shall we?
+
+   spreadsheet_name = 'Sheetcloud-Examples'  # This is the name of the target spreadsheet. If it does not exist, `write` will
+                                             # create a new one, no further action required. 
+   worksheet_name = 'Exm1'  # Each spreadsheet contains a number of worksheets (well, you probably used spreadsheet before).
+                           # If this worksheet already exists, the default behavior of `write` will overwrite any existing data.
+   sc.sheets.write(spreadsheet_name, worksheet_name, df, cache=False)  # Don't worry about the last parameter. We will get
+                                                                     # to this later.
+
+   # Perfect! Lets read it.
+   df2 = sc.sheets.read(spreadsheet_name, worksheet_name, cache=False) # The read function will also try to infer the dtype of the DataFrame columns automatically.
+
+   print(df2)
+   print(df2.info())
+   # Same format, same data. Yay.
+
+   # Now, show the differences 
+   diff = df.compare(df2)
+   print(f'There are {diff.size} differences to the original dataframe: {diff}')
