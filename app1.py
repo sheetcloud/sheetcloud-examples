@@ -12,7 +12,7 @@ def update():
         sc.sheets.append(SHEET_URL, sheet, df)
 
 
-if st.experimental_get_query_params().get('update', 'False').lower() == 'true':
+if st.experimental_get_query_params().get('update', ['False'])[0].lower() == 'true':
     update()
 else:
     st.title('Crypto News Feed Collector')
