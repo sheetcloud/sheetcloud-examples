@@ -1,9 +1,10 @@
+import os
 import pandas as pd
 import streamlit as st
 import sheetcloud as sc
 from datetime import datetime
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 SHEET_URL = 'https://docs.google.com/spreadsheets/d/1VeLIJNw69pGmCY6GRkfabBUUYb5oh1rKA6jX5rPdpZs/edit#gid=1505618093'
 
 
